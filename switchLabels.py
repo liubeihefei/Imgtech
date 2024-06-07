@@ -33,3 +33,40 @@ def switch_strs2lists(image, labels):
         newlabels.append(p1 + p2 + p3 + p4)
 
     return newlabels
+
+
+def switch_xywh2xyxyxyxy(label_files):
+    '''
+    将标签文件中xywh格式的标签转化为四点格式，从左上角点开始逆时针
+    :param label_files:标签文件的绝对路径列表
+    :return:none
+    '''
+
+    # 读取并转换标签
+    for label_file in label_files:
+        new_labels = []
+        with open(label_file, "r") as file:
+            for line in file:
+                boys = line.split(" ")
+                # 删掉换行符
+                boys[4] = boys[4][:-2]
+                x1 = float(boys[1]) - float(boys[3]) / 2
+                y1 = float(boys[2]) - float(boys[4]) / 2
+                x2 = float(boys[1]) - float(boys[3]) / 2
+                y2 = float(boys[2]) + float(boys[4]) / 2
+                x3 = float(boys[1]) + float(boys[3]) / 2
+                y3 = float(boys[2]) + float(boys[4]) / 2
+                x4 = float(boys[1]) + float(boys[3]) / 2
+                y4 = float(boys[2]) - float(boys[4]) / 2
+
+                newboy = boys[0] + " " + str(x1) + " " + str(y1) + " " + str(x2) + " " + str(
+                         y2) + " " + str(x3) + " " + str(y3) + " " + str(x4) + " " + str(y4)
+                new_labels.append(newboy)
+
+        # 写入原文件
+        with open(label_file, "w") as file:
+            for l in new_labels:
+                file.write(l)
+
+
+

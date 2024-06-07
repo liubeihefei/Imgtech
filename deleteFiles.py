@@ -6,6 +6,7 @@
 import os
 
 from getFiles import get_files
+from switchLabels import switch_xywh2xyxyxyxy
 
 
 def delete_redun_imgs(img_files, label_files):
@@ -45,4 +46,6 @@ if __name__ == '__main__':
     # 删除多余的图片
     delete_redun_imgs(img_files, label_files)
 
+    # 将标签从xywh转化为xyxyxyxy
+    switch_xywh2xyxyxyxy(label_files)
 
