@@ -9,7 +9,7 @@ def switch_strs2lists(image, labels):
     '''
     将字符串列表的标签转化为列表，列表中的每个元素为四个坐标，单位为原图像素坐标下的一个像素
     :param image:图像
-    :param labels:标签的字符串列表
+    :param labels:标签的字符串列表（每一串字符串末尾没有换行符）
     :return:标签的坐标列表列表
     '''
 
