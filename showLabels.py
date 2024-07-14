@@ -6,8 +6,9 @@
 import os
 import cv2
 
-from getFiles import get_files
-from switchLabels import switch_strs2lists
+from getFiles import get_files, find_labels
+from switchLabels import switch_strs2lists, switch_ab
+from mathTools import scale
 
 
 def show_label(img, label, dir):
@@ -48,17 +49,18 @@ if __name__ == '__main__':
     # 获取图片和标签文件
     img_files = []
     label_files = []
-    dirs = os.listdir("/home/horsefly/下载/gl_done（复件）")
+    dirs = os.listdir("/home/horsefly/下载/test")
     for i in range(len(dirs)):
-        dirs[i] = os.path.join("/home/horsefly/下载/gl_done（复件）", dirs[i])
+        dirs[i] = os.path.join("/home/horsefly/下载/test", dirs[i])
     get_files(img_files, label_files, dirs)
 
     dir = "/home/horsefly/下载/temp"
 
     for img_file in img_files:
-        name, suf = img_file.split(".")
-        name = name + ".txt"
-        for label_file in label_files:
-            if name == label_file:
-                show_label(img_file, label_file, dir)
+        labels = find_labels(img_file, label_files, -1)
+        labels = switch_strs2lists(labels)
+        labels = switch_ab(labels, 0)
+        new_labels = scale(labels, 1.2, 1.2)
+
+        show_label(img_file, label_file, dir)
 
