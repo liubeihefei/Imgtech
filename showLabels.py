@@ -6,9 +6,11 @@
 import os
 import cv2
 
-from getFiles import get_files, find_labels
-from switchLabels import switch_strs2lists, switch_ab
+from getFiles import get_files, find_labels, get_classes
+from switchLabels import switch_strs2lists, switch_ab, switch_lists2str
 from mathTools import scale
+from saveFiles import saveImgAndLabels
+from lowHSV_V import low_hsv
 
 
 def show_label(img, label, dir):
@@ -33,7 +35,8 @@ def show_label(img, label, dir):
     with open(label) as file:
         for line in file:
             labels.append(line[:-2])
-    new_labels = switch_strs2lists(image, labels)
+    new_labels = switch_strs2lists(labels)
+    new_labels = switch_ab(image, new_labels, 0)
 
     # 将四点绘制在图上并保存
     for nl in new_labels:
@@ -56,11 +59,24 @@ if __name__ == '__main__':
 
     dir = "/home/horsefly/下载/temp"
 
-    for img_file in img_files:
-        labels = find_labels(img_file, label_files, -1)
-        labels = switch_strs2lists(labels)
-        labels = switch_ab(labels, 0)
-        new_labels = scale(labels, 1.2, 1.2)
+    cnt = 0
 
-        show_label(img_file, label_file, dir)
+    for img_file in img_files:
+        labels, label_file = find_labels(img_file, label_files, [-1])
+        labels = switch_strs2lists(labels)
+        labels = switch_ab(cv2.imread(img_file), labels, 0)
+
+        new_img = low_hsv(img_file, labels, 0.8)
+        cv2.imwrite(dir + "/out" + str(cnt) + ".jpg", new_img)
+        cnt += 1
+
+        # # 获取类别
+        # classes = get_classes(label_file)
+        #
+        # new_labels = scale(labels, 1.2, 1.2)
+        # new_labels = switch_ab(cv2.imread(img_file), new_labels, 1)
+        # new_labels = switch_lists2str(new_labels)
+        # saveImgAndLabels(img_file, new_labels, classes, dir)
+
+    # show_label("/home/horsefly/下载/rune/train/official/OFFICIAL_23_RUNE_5.jpg", "/home/horsefly/下载/rune/train/official/OFFICIAL_23_RUNE_5.txt", "/home/horsefly/下载")
 

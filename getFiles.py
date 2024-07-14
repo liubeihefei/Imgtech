@@ -5,6 +5,7 @@
 
 import os
 
+
 def get_files(img_files, label_files, dirs):
     '''
     根据所给绝对路径获取图片、标签文件绝对路径列表
@@ -29,23 +30,26 @@ def get_files(img_files, label_files, dirs):
                 temp[i] = os.path.join(dir, temp[i])
             get_files(img_files, label_files, temp)
 
+
 def find_labels(img_file, label_files, label):
     '''
 
     :param img_file:要找的图片的绝对路径
     :param label_files:标签的绝对路径列表
     :param label:指定要查询的类，可以为列表，当填-1时保存标签所有行
-    :return:经过筛选的标签列表，每一个元素为字符串（不带换行符）
+    :return:经过筛选的标签列表，每一个元素为字符串（不带换行符）；同时返回对应的标签文件绝对路径
     '''
     name, suf = img_file.split('.')
 
     labels = []
+    label_file = ""
 
     # 查找标签集里是否有所要图像对应的
     name = name + ".txt"
 
     for i in range(len(label_files)):
         if name == label_files[i]:
+            label_file = label_files[i]
             with open(label_files[i], 'r') as temp_file:
                 for line in temp_file:
                     boys = line.split(' ')
@@ -61,4 +65,20 @@ def find_labels(img_file, label_files, label):
                                 line = line[:-2]
                                 labels.append(line)
 
-    return labels
+    return labels, label_file
+
+
+def get_classes(label_file):
+    """
+    根据标签文件获取类别，为字符串列表
+    :param label_file:标签文件的绝对路径
+    :return:类别的字符串列表
+    """
+    classes = []
+    with open(label_file) as file:
+        for line in file:
+            temp = line.split(" ")
+            classes.append(temp[0])
+
+    return classes
+

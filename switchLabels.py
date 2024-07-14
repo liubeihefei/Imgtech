@@ -18,14 +18,34 @@ def switch_strs2lists(labels):
         for i in range(len(boys)):
             boys[i] = float(boys[i])
 
-        xyxyxyxy = list(map(boys[1:]))
+        xyxyxyxy = list(boys[1:])
 
-        p1 = list(map(int, xyxyxyxy[0: 2]))
-        p2 = list(map(int, xyxyxyxy[2: 4]))
-        p3 = list(map(int, xyxyxyxy[4: 6]))
-        p4 = list(map(int, xyxyxyxy[6: 8]))
+        p1 = xyxyxyxy[0: 2]
+        p2 = xyxyxyxy[2: 4]
+        p3 = xyxyxyxy[4: 6]
+        p4 = xyxyxyxy[6: 8]
 
         newlabels.append(p1 + p2 + p3 + p4)
+
+    return newlabels
+
+
+def switch_lists2str(labels):
+    """
+    将坐标列表列表的标签转化为字符串列表
+    :param labels:标签的坐标列表列表
+    :return:标签的字符串列表
+    """
+    newlabels = []
+    for label in labels:
+        new_boy = ""
+        for boy in label:
+            boy = str(boy)
+            new_boy += boy
+            new_boy += " "
+
+        new_boy = new_boy[:-1]
+        newlabels.append(new_boy)
 
     return newlabels
 
@@ -49,23 +69,23 @@ def switch_ab(image, labels, flag):
         p4 = label[6: 8]
 
         if flag == 0:
-            p1[0] *= width
-            p1[1] *= height
-            p2[0] *= width
-            p2[1] *= height
-            p3[0] *= width
-            p3[1] *= height
-            p4[0] *= width
-            p4[1] *= height
+            p1[0] = int(p1[0] * width)
+            p1[1] = int(p1[1] * height)
+            p2[0] = int(p2[0] * width)
+            p2[1] = int(p2[1] * height)
+            p3[0] = int(p3[0] * width)
+            p3[1] = int(p3[1] * height)
+            p4[0] = int(p4[0] * width)
+            p4[1] = int(p4[1] * height)
         elif flag == 1:
-            p1[0] /= width
-            p1[1] /= height
-            p2[0] /= width
-            p2[1] /= height
-            p3[0] /= width
-            p3[1] /= height
-            p4[0] /= width
-            p4[1] /= height
+            p1[0] = p1[0] / width
+            p1[1] = p1[1] / height
+            p2[0] = p2[0] / width
+            p2[1] = p2[1] / height
+            p3[0] = p3[0] / width
+            p3[1] = p3[1] / height
+            p4[0] = p4[0] / width
+            p4[1] = p4[1] / height
 
         newlabels.append(p1 + p2 + p3 + p4)
 
