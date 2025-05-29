@@ -4,7 +4,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-
+from saveFiles import saveImgAndLabels
 
 def get_files(img_files, label_files, dirs):
     '''
@@ -14,7 +14,6 @@ def get_files(img_files, label_files, dirs):
     :param dirs:绝对路径列表（若图片与标签不在同一目录，多次调用该函数即可）
     :return:none
     '''
-
     for dir in dirs:
         # 如果是文件，则根据后缀将完整路径放进对应列表
         if os.path.isfile(dir):
@@ -81,4 +80,19 @@ def get_classes(label_file):
             classes.append(temp[0])
 
     return classes
+
+
+if __name__ == '__main__':
+    img_files = []
+    label_files = []
+    get_files(img_files, label_files, ["/home/horsefly/下载/rune/train"])
+
+    for img_file in img_files:
+        labels, path = find_labels(img_file, label_files, [-1])
+        classes = []
+        for i in range(len(labels)):
+            labels[i] = labels[i][2:]
+            classes.append("0")
+        saveImgAndLabels(img_file, labels, classes, "/home/horsefly/下载/single_rune/train")
+
 
